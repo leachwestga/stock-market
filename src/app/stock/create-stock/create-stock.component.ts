@@ -1,52 +1,31 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, FormArray } from '@angular/forms';
-import { Validators, FormBuilder } from '@angular/forms';
 import { Stock } from '../../model/stock';
-
-let counter = 1;
 
 @Component({
   selector: 'app-create-stock',
   templateUrl: './create-stock.component.html',
   styleUrls: ['./create-stock.component.css']
 })
-
 export class CreateStockComponent {
-  private stock: Stock;
-  public stockForm: FormGroup;
-  constructor(private fb: FormBuilder) {
-    this.createForm();
-    this.stock = new Stock('Test ' + counter++, 'TST', 20, 10, 'NYSE');
+
+  public stock: Stock;
+  public confirmed = false;
+  public exchanges = ['NYSE', 'NASDAQ', 'OTHER'];
+  constructor() {
+    this.stock =  new Stock('', '', 0, 0, 'NASDAQ');
   }
 
-  createForm() {
-    this.stockForm = this.fb.group({
-      name: [null, Validators.required],
-      code: [null, [Validators.required, Validators.minLength(2)]],
-      price: [0, [Validators.required, Validators.min(0)]]
-    });
+  setStockPrice(price) {
+    this.stock.price = price;
+    this.stock.previousPrice = price;
   }
 
-  loadStockFromServer() {
-    this.stock = new Stock('Test ' + counter++, 'TST', 20, 10, 'NYSE');
-    let stockFormModel = Object.assign({}, this.stock);
-    delete stockFormModel.previousPrice;
-    delete stockFormModel.favorite;
-    delete stockFormModel.exchange;
-    this.stockForm.setValue(stockFormModel);
-  }
-
-  patchStockForm() {
-    this.stock = new Stock(`Test ${counter++}`, 'TST', 20, 10, 'NYSE');
-    this.stockForm.patchValue(this.stock);
-  }
-
-  resetForm() {
-    this.stockForm.reset();
-  }
-
-  onSubmit() {
-    this.stock = Object.assign({}, this.stockForm.value);
-    console.log('Saving stock', this.stock);
+  createStock(stockForm) {
+    console.log('Stock form', stockForm);
+    if (stockForm.valid) {
+      console.log('Creating stock ', this.stock);
+    } else {
+      console.error('Stock form is in an invalid state');
+    }
   }
 }
