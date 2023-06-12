@@ -5,7 +5,12 @@ import { Stock } from '../../model/stock';
 
 let counter = 1;
 
-/** NO CHANGE IN COMPONENT DECORATOR **/
+@Component({
+  selector: 'app-create-stock',
+  templateUrl: './create-stock.component.html',
+  styleUrls: ['./create-stock.component.css']
+})
+
 export class CreateStockComponent {
   private stock: Stock;
   public stockForm: FormGroup;
